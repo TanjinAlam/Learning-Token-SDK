@@ -1,13 +1,13 @@
-import { Client } from '../src/client';
+import { LT } from '../src/client';
 
-describe('Client', () => {
-    let client: Client;
+describe('LT', () => {
+    let client: LT;
 
     /**
      * Initialize the client before all tests.
      */
     beforeAll(() => {
-        client = new Client('https://api.example.com');
+        client = new LT('https://api.example.com');
     });
 
     /**

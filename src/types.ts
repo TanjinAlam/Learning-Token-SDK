@@ -6,6 +6,12 @@ export interface ApiResponse<T> {
   statusText: string;
 }
 
+export interface ZoomTokenResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+}
+
 export interface User {
   id: number;
   name: string;

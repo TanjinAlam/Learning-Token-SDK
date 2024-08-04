@@ -1,12 +1,11 @@
 {
   "name": "learning-tokens-sdk",
-  "version": "1.0.0",
-  "description": "A brief description of your SDK",
+  "version": "1.0.6",
+  "description": "A SDK to interact with the Learning Tokens contract on the Hyperledger Fabric network.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -70,7 +69,6 @@
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^22.0.0",
-    "dotenv": "^16.4.5",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
@@ -85,5 +83,8 @@
     "testMatch": [
       "<rootDir>/test/**/*.test.ts"
     ]
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

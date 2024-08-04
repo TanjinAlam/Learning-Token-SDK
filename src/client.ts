@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import { ApiResponse, ZoomTokenResponse } from "./types";
-import "dotenv/config";
 
 /**
  * @class
@@ -18,10 +17,10 @@ export class LT {
    * @param {string} baseURL - The base URL of the API.
    */
   constructor(apiKey: string) {
-    this.baseURL = process.env.API_URL || "";
+    this.baseURL = "";
     this.apiKey = apiKey;
     this.httpClient = axios.create({
-      baseURL: process.env.API_URL || "",
+      baseURL: "",
       headers: { Authorization: `Bearer ${this.apiKey}` },
     });
 

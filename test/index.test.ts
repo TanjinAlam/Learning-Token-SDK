@@ -1,13 +1,13 @@
-import { Client } from '../src/client';
+import { LT } from '../src/client';
 
 describe('Client', () => {
-    let client: Client;
+    let lt: LT;
 
     /**
      * Initialize the client before all tests.
      */
     beforeAll(() => {
-        client = new Client('https://api.example.com');
+        lt = new LT('test');
     });
 
     /**
@@ -17,8 +17,7 @@ describe('Client', () => {
     it('should validate an SDK key for an institution', async () => {
         const institutionId = 1;
         const sdkKey = 'exampleSdkKey';
-        const token = 'exampleToken';
-        const response = await client.validateSdkKeyForInstitution(institutionId, sdkKey, token);
+        const response = await lt.validateSdkKeyForInstitution(institutionId, sdkKey);
 
         // Ensure the response is a boolean (result of validation)
         expect(typeof response).toBe('boolean');

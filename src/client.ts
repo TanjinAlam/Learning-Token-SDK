@@ -6,22 +6,21 @@ import { ApiResponse, ZoomTokenResponse } from "./types";
  * Client class for interacting with the API.
  */
 export class LT {
-    private httpClient: AxiosInstance;
+    private backendHttpClient: AxiosInstance;
     private baseURL: string;
-    private apiKey: string;
+
 
     private zoomHttpClient: AxiosInstance;
     private zoomAccessToken: string | null = null;
     /**
      * Creates an instance of the Client.
-     * @param {string} baseURL - The base URL of the API.
+     * @param {string} apiKey - The API key of the API.
      */
     constructor(apiKey: string) {
-        this.baseURL = "";
-        this.apiKey = apiKey;
-        this.httpClient = axios.create({
-            baseURL: "",
-            headers: { Authorization: `Bearer ${this.apiKey}` },
+        this.baseURL = "http://localhost:3000/api";
+        this.backendHttpClient = axios.create({
+            baseURL: this.baseURL,
+            headers: { Authorization: `Bearer ${apiKey}` },
         });
 
         this.zoomHttpClient = axios.create({
@@ -64,5 +63,19 @@ export class LT {
         } catch (error: any) {
             throw new Error(error.response?.data?.message || error.message);
         }
+    }
+
+
+
+    /**
+     * Async function to validate an SDK key for an institution.
+     * @param {number} institutionId - The ID of the institution.
+     * @param {string} sdkKey - The SDK key to validate.
+     * @returns {Promise<boolean>} The result of the validation.
+     * @author Weber Dubois
+     */
+    async validateSdkKeyForInstitution(institutionId: number, sdkKey: string): Promise<boolean> {
+        const response = await this.backendHttpClient.post(`/institutions/validate-sdk-key/${institutionId}`, { sdkKey });
+        return response.data;
     }
 }

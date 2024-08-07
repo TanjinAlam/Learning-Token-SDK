@@ -1,41 +1,26 @@
-import { Client } from '../src/client';
+import { LT } from '../src/client';
 
 describe('Client', () => {
-    let client: Client;
+    let lt: LT;
 
     /**
      * Initialize the client before all tests.
      */
     beforeAll(() => {
-        client = new Client('https://api.example.com');
+        lt = new LT('test');
     });
 
     /**
-     * Test the getUser method.
-     * This test checks if a user can be fetched by their ID.
+     * Test the validateSdkKeyForInstitution method.
+     * This test checks if an SDK key for an institution can be validated.
      */
-    it('should get a user by ID', async () => {
-        const userId = 1;
-        const response = await client.getUser(userId);
+    it('should validate an SDK key for an institution', async () => {
+        const institutionId = 1;
+        const sdkKey = 'exampleSdkKey';
+        const response = await lt.validateSdkKeyForInstitution(institutionId, sdkKey);
 
-        // Ensure the response status is 200
-        expect(response.status).toBe(200);
-
-        // Ensure the response data contains the correct user ID
-        expect(response.data).toHaveProperty('id', userId);
-    });
-
-    /**
-     * Test the getUsers method.
-     * This test checks if a list of users can be fetched.
-     */
-    it('should get a list of users', async () => {
-        const response = await client.getUsers();
-
-        // Ensure the response status is 200
-        expect(response.status).toBe(200);
-
-        // Ensure the response data is an array
-        expect(response.data).toBeInstanceOf(Array);
+        // Ensure the response is a boolean (result of validation)
+        expect(typeof response).toBe('boolean');
     });
 });
+

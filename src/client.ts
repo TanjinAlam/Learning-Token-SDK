@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
-import { ApiResponse, ZoomTokenResponse } from "./types";
-
+import { ApiResponse, MeetupTokenResponse, ZoomTokenResponse } from "./types";
+// import { gql } from "graphql-request";
 /**
  * @class
  * Client class for interacting with the API.
@@ -12,6 +12,9 @@ export class LT {
 
   private zoomHttpClient: AxiosInstance;
   private zoomAccessToken: string | null = null;
+
+  private meetupGraphQLClient: any;
+  private meetupAccessToken: string | null = null;
   /**
    * Creates an instance of the Client.
    * @param {string} baseURL - The base URL of the API.
@@ -21,7 +24,7 @@ export class LT {
     this.apiKey = apiKey;
     this.httpClient = axios.create({
       baseURL: "",
-      headers: { Authorization: `Bearer ${this.apiKey}` },
+      headers: { secretKey: this.apiKey },
     });
 
     this.zoomHttpClient = axios.create({
@@ -55,6 +58,38 @@ export class LT {
       });
 
       this.zoomAccessToken = response.data.access_token;
+
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+
+
+  async authenticateMeetup(clientId: string, clientSecret: string): Promise<ApiResponse<MeetupTokenResponse>> {
+    const tokenUrl = "https://secure.meetup.com/oauth2/access";
+
+
+    const data = 'grant_type=client_credentials';
+    // const data = qs.stringify({
+    //   client_id: clientId,
+    //   client_secret: clientSecret,
+    //   grant_type: "client_credentials",
+    // });
+
+    try {
+      const response = await axios.post<MeetupTokenResponse>(tokenUrl, data, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+
+      this.meetupAccessToken = response.data.access_token;
+      this.meetupGraphQLClient.setHeader('Authorization', `Bearer ${this.meetupAccessToken}`);
 
       return {
         data: response.data,

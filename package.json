@@ -1,6 +1,6 @@
 {
   "name": "learning-tokens-sdk",
-  "version": "1.0.7",
+  "version": "1.0.10",
   "description": "A SDK to interact with the Learning Tokens contract on the Hyperledger Fabric network.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { ApiResponse, MeetupTokenResponse, ZoomTokenResponse } from "./types";
+import { log } from "console";
 // import { gql } from "graphql-request";
 /**
  * @class
@@ -20,10 +21,10 @@ export class LT {
    * @param {string} baseURL - The base URL of the API.
    */
   constructor(apiKey: string) {
-    this.baseURL = "";
+    this.baseURL = "http://localhost:3000/api";
     this.apiKey = apiKey;
     this.httpClient = axios.create({
-      baseURL: "",
+      baseURL: this.baseURL,
       headers: { secretKey: this.apiKey },
     });
 
@@ -99,5 +100,15 @@ export class LT {
     } catch (error: any) {
       throw new Error(error.response?.data?.message || error.message);
     }
+  }
+
+
+  async testing() {
+    const response = await this.httpClient.get('/institutions/test')
+     return {
+      data: response.data,
+      status: response.status,
+      statusText: response.statusText,
+    };
   }
 }

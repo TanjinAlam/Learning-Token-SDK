@@ -1,7 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import { ApiResponse, MeetupTokenResponse, ZoomTokenResponse } from "./types";
-import { log } from "console";
-// import { gql } from "graphql-request";
 /**
  * @class
  * Client class for interacting with the API.
@@ -76,12 +74,6 @@ export class LT {
 
 
     const data = 'grant_type=client_credentials';
-    // const data = qs.stringify({
-    //   client_id: clientId,
-    //   client_secret: clientSecret,
-    //   grant_type: "client_credentials",
-    // });
-
     try {
       const response = await axios.post<MeetupTokenResponse>(tokenUrl, data, {
         headers: {
@@ -103,12 +95,26 @@ export class LT {
   }
 
 
-  async testing() {
-    const response = await this.httpClient.get('/institutions/test')
+    /**
+   * Pre event data save.
+   * @param {string} eventId - The eventId of the Zoom Meeting.
+   */
+  async savePreEventData(eventId:string) {
+    const data = {
+      eventId,
+      eventName: "HYPERLEDGER",
+      eventType: "Primary",
+      description: "string",
+      eventDate: new Date(),
+      speakerName: "Khairul Hasan",
+      speakerEmail: "khairul.hasan.dev@gmail.com",
+      speakerTitle: "Mantee",
+      organization: "Learning Token"
+    }
+    const response = await this.httpClient.post('/preevent', data)
      return {
       data: response.data,
-      status: response.status,
-      statusText: response.statusText,
     };
   }
+
 }

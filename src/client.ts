@@ -1,7 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import { ApiResponse, MeetupTokenResponse, ZoomTokenResponse } from "./types";
-import { log } from "console";
-// import { gql } from "graphql-request";
 /**
  * @class
  * Client class for interacting with the API.
@@ -48,7 +46,7 @@ export class LT {
       "base64"
     );
 
-    const data = 'grant_type=client_credentials';
+    const data = "grant_type=client_credentials";
 
     try {
       const response = await axios.post<ZoomTokenResponse>(tokenUrl, data, {
@@ -70,18 +68,13 @@ export class LT {
     }
   }
 
-
-  async authenticateMeetup(clientId: string, clientSecret: string): Promise<ApiResponse<MeetupTokenResponse>> {
+  async authenticateMeetup(
+    clientId: string,
+    clientSecret: string
+  ): Promise<ApiResponse<MeetupTokenResponse>> {
     const tokenUrl = "https://secure.meetup.com/oauth2/access";
 
-
-    const data = 'grant_type=client_credentials';
-    // const data = qs.stringify({
-    //   client_id: clientId,
-    //   client_secret: clientSecret,
-    //   grant_type: "client_credentials",
-    // });
-
+    const data = "grant_type=client_credentials";
     try {
       const response = await axios.post<MeetupTokenResponse>(tokenUrl, data, {
         headers: {
@@ -90,7 +83,10 @@ export class LT {
       });
 
       this.meetupAccessToken = response.data.access_token;
-      this.meetupGraphQLClient.setHeader('Authorization', `Bearer ${this.meetupAccessToken}`);
+      this.meetupGraphQLClient.setHeader(
+        "Authorization",
+        `Bearer ${this.meetupAccessToken}`
+      );
 
       return {
         data: response.data,
@@ -102,13 +98,45 @@ export class LT {
     }
   }
 
-
-  async testing() {
-    const response = await this.httpClient.get('/institutions/test')
-     return {
+  /**
+   * Pre event data save.
+   * @param {string} eventId - The eventId of the Zoom Meeting.
+   */
+  async savePreEventData(eventId: string) {
+    const data = {
+      eventId,
+      eventName: "HYPERLEDGER",
+      eventType: "Primary",
+      description: "string",
+      eventDate: new Date(),
+      speakerName: "Khairul Hasan",
+      speakerEmail: "khairul.hasan.dev@gmail.com",
+      speakerTitle: "Mantee",
+      organization: "Learning Token",
+    };
+    const response = await this.httpClient.post("/preevent", data);
+    return {
       data: response.data,
-      status: response.status,
-      statusText: response.statusText,
+    };
+  }
+
+  /**
+   * Post event data save.
+   * @param {string} eventId - The eventId of the Zoom Meeting.
+   */
+  async savePostEventData(eventId: string) {
+    const data = [
+      {
+        eventId,
+        name: "Khairul Hasan",
+        email: "khairul.hasan.dev@gmail.com",
+        joinTime: new Date(),
+        leaveTime: new Date(),
+      },
+    ];
+    const response = await this.httpClient.post("/postevent", data);
+    return {
+      data: response.data,
     };
   }
 }

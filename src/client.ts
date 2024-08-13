@@ -133,6 +133,20 @@ export class LT {
         joinTime: new Date(),
         leaveTime: new Date(),
       },
+      {
+        eventId,
+        name: "Khairul Hasan",
+        email: "khairul.hasan@gmail.com",
+        joinTime: new Date(),
+        leaveTime: new Date(),
+      },
+      {
+        eventId,
+        name: "Khairul Hasan",
+        email: "khairul@gmail.com",
+        joinTime: new Date(),
+        leaveTime: new Date(),
+      },
     ];
     const response = await this.httpClient.post("/postevent", data);
     return {

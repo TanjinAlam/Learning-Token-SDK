@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Routes
 const postDataCollectionRoute = require('./routes/postDataCollection');
-app.use('/post-data-collection', postDataCollectionRoute);
+app.use('/post-event-data-collection', postDataCollectionRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

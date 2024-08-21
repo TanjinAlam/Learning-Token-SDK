@@ -44,10 +44,6 @@ class Utility {
         // Get the local timezone name
         const timezone = dt.zoneName;
     
-        // Display results
-        console.log(`Local Time: ${localTime}`);
-        console.log(`Local Timezone: ${timezone}`);
-
         return timezone;
     }
 

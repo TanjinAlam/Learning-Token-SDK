@@ -5,8 +5,8 @@ const axios = require('axios');
 
 // Response
 const MeetingDetailsResponse = require('../responses/MeetingDetailsResponse');
-const MeetingSummaryResponse = require('../responses/MeetingSummaryResponse');
 const PastMeetingParticipantsResponse = require('../responses/PastMeetingParticipantsResponse');
+const MeetingPollsResponse = require('../responses/MeetingPollsResponse');
 
 // Zoom API Endpoints
 const pastMeetingsUrl = process.env.ZOOM_PAST_MEETINGS_ENDPOINT;
@@ -164,13 +164,17 @@ router.get('/:eventId', async (req, res) => {
         // Zoom API endpoints
         const meetingDetailsUrl = `${pastMeetingsUrl}${eventId}`;
         const meetingParticipantsUrl = `${pastMeetingsUrl}${eventId}/participants`;
+        const meetingPollsUrl = `${pastMeetingsUrl}${eventId}/polls`;
         
         // Fetch past meeting details and participants in parallel
-        const [meetingDetailsResponse, meetingParticipantsResponse] = await Promise.all([
+        const [meetingDetailsResponse, meetingParticipantsResponse, meetingPollsResponse] = await Promise.all([
             axios.get(meetingDetailsUrl, {
                 headers: { 'Authorization': `Bearer ${accessToken}` }
             }),
             axios.get(meetingParticipantsUrl, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            }),
+            axios.get(meetingPollsUrl, {
                 headers: { 'Authorization': `Bearer ${accessToken}` }
             })
         ]);
@@ -196,14 +200,30 @@ router.get('/:eventId', async (req, res) => {
             .filter(participant => participant.status === 'in_meeting')
             .map(participant => new PastMeetingParticipantsResponse(
                 participant.name,
-                participant.user_email !== '' ? participant.user_email : participant.user_id, // set user_id if user_email doesn't exist
+                participant.user_email || "", // can retrieve email if there's meeting registration
                 participant.join_time,
                 participant.leave_time,
                 participant.duration
             ));
 
-        // Add participants to the meeting details response
+        // Get meeting polls
+        const polls = new MeetingPollsResponse(meetingPollsResponse.data);
+
+        // Map emails from polls to participants - override if there's no emails available
+        if (polls.questions.length > 0) {
+            const emailMap = new Map(polls.questions.map(question => [question.name, question.email]));
+            
+            // Update participants with email from polls if available
+            pastMeetingParticipants.forEach(participant => {
+                if (emailMap.has(participant.name)) {
+                    participant.userEmail = emailMap.get(participant.name);
+                }
+            });
+        }
+
+        // Add participants and polls to the meeting details response
         meetingDetailsResponseData.pastMeetingParticipants = pastMeetingParticipants;
+        meetingDetailsResponseData.polls = polls;
 
         res.status(200).json(meetingDetailsResponseData);
     } catch (error) {

@@ -146,7 +146,7 @@ router.get('/past-meeting-participants/:meetingId', async (req, res) => {
 });
 
 /**
- * GET endpoint to get Post Event Data Collection: Consolidated Past Meeting and Participants Response
+ * GET endpoint to get Post Event Data Collection: Consolidated Past Meeting and Participants, Polls Response
  * Request Param: eventId -- example mtgId: 87648908877
  * Request Headers: Zoom API Access Token
  */

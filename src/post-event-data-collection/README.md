@@ -14,6 +14,10 @@ node app
 
 ### Sample cURL snippets and Response ###
 ```
+1. GET Event Data Collection: Consolidated Past Meeting and Participants, Polls Response
+```
+
+```
 curl --location 'http://localhost:3008/post-event-data-collection/82886746452' \
 --header 'Access-Token: eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImUzZWYwYTJmLTgzYzMtNDk1ZS04ZGQ3LTdhYTlhYTA4ODFjYiJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjo5LCJhdWlkIjoiZGUxOWQ0ZTYyOGE3NjY3Y2VkYTMwZDlkNmY5YjMyMTEiLCJuYmYiOjE3MjQyODE2NTksImNvZGUiOiJlNS1vUkV5cVJhaTdKeFBLRlVXU293Y3h2ZnM1UGU2MHYiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI0Mjg1MjU5LCJ0eXBlIjozLCJpYXQiOjE3MjQyODE2NTksImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.ZC7vzjF2Qd2ufB1RMY5Ftdevbnq0pbddJZydeL5BhWAGhi-f3nvIJ-40Uf9Qv6nhta7E-6aoju2pjws09TwYaA'
 ```
@@ -264,4 +268,65 @@ Sample Response with Registration but without Polls:
         "questions": []
     }
 }
+```
+
+```
+2. GET Past Meeting Details
+```
+
+```
+curl --location 'http://localhost:3008/post-event-data-collection/past-meeting-details/82886746452' \
+--header 'Access-Token: eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImU3NGFkNzA3LWQ2N2UtNDFjMy1hY2FlLTNhYmFhMThjNmQ0OCJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjo5LCJhdWlkIjoiNGRkOWIyZjQ2ODZjOGI5N2Y4ZmZmZWE1OGNmZGRhZTgiLCJuYmYiOjE3MjUwMzY5OTAsImNvZGUiOiI5cTctbVIwZFJRaWp6a2h3ZzgxQ29BNGViQ3hQYkF3OGoiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI1MDQwNTkwLCJ0eXBlIjozLCJpYXQiOjE3MjUwMzY5OTAsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.jlfIEkhYjqsvfTmMzow_6qaN8Sazr8gQXWrsbZSHRaRA7TY_2Tfoto0ETXiERFFzzUUmwMD0NGZJKWw4bzLj-Q'
+```
+
+sample Response:
+```
+{
+    "uuid": "T4rUx0HTTa+KHMpHuy1R2Q==",
+    "id": 82886746452,
+    "hostId": "2dNPNZeuSTWSm_mv4mAXag",
+    "type": "A scheduled meeting.",
+    "topic": "Alfonso Govela's Zoom Meeting",
+    "startTime": "2024-08-20T20:12:54Z",
+    "endTime": "2024-08-20T20:36:13Z",
+    "duration": 24,
+    "timezone": "UTC",
+    "participantsCount": 3
+}
+```
+
+```
+3. GET Past Meeting Participants
+```
+
+```
+curl --location 'http://localhost:3008/post-event-data-collection/past-meeting-participants/82886746452' \
+--header 'Access-Token: eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImU3NGFkNzA3LWQ2N2UtNDFjMy1hY2FlLTNhYmFhMThjNmQ0OCJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjo5LCJhdWlkIjoiNGRkOWIyZjQ2ODZjOGI5N2Y4ZmZmZWE1OGNmZGRhZTgiLCJuYmYiOjE3MjUwMzY5OTAsImNvZGUiOiI5cTctbVIwZFJRaWp6a2h3ZzgxQ29BNGViQ3hQYkF3OGoiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI1MDQwNTkwLCJ0eXBlIjozLCJpYXQiOjE3MjUwMzY5OTAsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.jlfIEkhYjqsvfTmMzow_6qaN8Sazr8gQXWrsbZSHRaRA7TY_2Tfoto0ETXiERFFzzUUmwMD0NGZJKWw4bzLj-Q'
+```
+
+sample Response:
+```
+[
+    {
+        "name": "Alfonso Govela",
+        "userEmail": "alfonsogovela@mac.com",
+        "joinTime": "2024-08-20T20:12:54Z",
+        "leaveTime": "2024-08-20T20:36:13Z",
+        "duration": 1399
+    },
+    {
+        "name": "Ciel",
+        "userEmail": "33556480",
+        "joinTime": "2024-08-20T20:14:36Z",
+        "leaveTime": "2024-08-20T20:35:52Z",
+        "duration": 1276
+    },
+    {
+        "name": "Harsh Sinyal",
+        "userEmail": "50333696",
+        "joinTime": "2024-08-20T20:15:46Z",
+        "leaveTime": "2024-08-20T20:35:52Z",
+        "duration": 1206
+    }
+]
 ```

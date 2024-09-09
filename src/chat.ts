@@ -1,22 +1,21 @@
 import axios from "axios";
 import fs from "fs";
 import path from "path";
-import { Builder, By, until, logging } from 'selenium-webdriver';
-import chrome from 'selenium-webdriver/chrome';
+import { Builder, By, until, logging } from "selenium-webdriver";
+import chrome from "selenium-webdriver/chrome";
 // Zoom API credentials
-const ZOOM_ACCOUNT_ID = "";
-const ZOOM_CLIENT_ID = "";
-const ZOOM_CLIENT_SECRET = "";
-
+// const ZOOM_ACCOUNT_ID = "";
+// const ZOOM_CLIENT_ID = "";
+// const ZOOM_CLIENT_SECRET = "";
 
 // The grant_type is included in the URL
-const tokenUrl = `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${ZOOM_ACCOUNT_ID}`;
-const authString = Buffer.from(
-  `${ZOOM_CLIENT_ID}:${ZOOM_CLIENT_SECRET}`
-).toString("base64");
+// const tokenUrl = `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${ZOOM_ACCOUNT_ID}`;
+// const authString = Buffer.from(
+//   `${ZOOM_CLIENT_ID}:${ZOOM_CLIENT_SECRET}`
+// ).toString("base64");
 
 async function downloadAndProcessFile(url: string, pass: string) {
-  const meetingId = "MEETINGID";
+  // const meetingId = "MEETINGID";
 
   (async () => {
     const downloadPath = path.resolve(__dirname, "downloads");
@@ -32,14 +31,16 @@ async function downloadAndProcessFile(url: string, pass: string) {
       "safebrowsing.enabled": true,
     });
 
+    chromeOptions.addArguments("--headless=new");
     // Enable performance logging
     chromeOptions.set("goog:loggingPrefs", { performance: "ALL" });
 
-    // Launch the Chrome browser
     const driver = await new Builder()
       .forBrowser("chrome")
-      .setChromeOptions(chromeOptions.addArguments("--headless=new"))
+      .setChromeOptions(chromeOptions)
       .build();
+
+      
 
     let emailAddresses: string[] | null = [];
 
@@ -110,38 +111,66 @@ async function downloadAndProcessFile(url: string, pass: string) {
   })();
 }
 
-axios
-  .post(tokenUrl, null, {
-    headers: {
-      Authorization: `Basic ${authString}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  })
-  .then((res) => {
-    const accessToken = res.data.access_token;
-    axios
-      .get(
-        `https://api.zoom.us/v2/meetings/6k1W586RRvCxVteiL4+Dfg==/recordings?file_type=chat`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      )
-      .then(async (res) => {
-        const recordingFiles = res.data.recording_files;
-        const txtFile = recordingFiles.find(
-          (file: any) => file.file_extension === "TXT"
-        );
+// axios
+//   .post(tokenUrl, null, {
+//     headers: {
+//       Authorization: `Basic ${authString}`,
+//       "Content-Type": "application/x-www-form-urlencoded",
+//     },
+//   })
+//   .then((res) => {
+//     const accessToken = res.data.access_token;
+//     axios
+//       .get(
+//         `https://api.zoom.us/v2/meetings/6k1W586RRvCxVteiL4+Dfg==/recordings?file_type=chat`,
+//         {
+//           headers: { Authorization: `Bearer ${accessToken}` },
+//         }
+//       )
+//       .then(async (res) => {
+//         const recordingFiles = res.data.recording_files;
+//         const txtFile = recordingFiles.find(
+//           (file: any) => file.file_extension === "TXT"
+//         );
 
-        if (txtFile) {
-          const downloadUrl = txtFile.download_url;
-          const password = res.data.password;
-          const result = await downloadAndProcessFile(downloadUrl, password);
-          console.log(result);
-        } else {
-          console.log("TXT file not found.");
-        }
-      });
-  })
-  .catch((err) => {
-    console.error("Error fetching access token:", err);
-  });
+//         if (txtFile) {
+//           const downloadUrl = txtFile.download_url;
+//           const password = res.data.password;
+//           const result = await downloadAndProcessFile(downloadUrl, password);
+//           console.log(result);
+//         } else {
+//           console.log("TXT file not found.");
+//         }
+//       });
+//   })
+//   .catch((err) => {
+//     console.error("Error fetching access token:", err);
+//   });
+
+export const getEmails = async (meetingId: string, access_token: string) => {
+  axios
+    .get(
+      `https://api.zoom.us/v2/meetings/${meetingId}/recordings?file_type=chat`,
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      }
+    )
+    .then(async (res) => {
+      const recordingFiles = res.data.recording_files;
+      const txtFile = recordingFiles.find(
+        (file: any) => file.file_extension === "TXT"
+      );
+      if (txtFile) {
+        const downloadUrl = txtFile.download_url;
+        const password = res.data.password;
+        const emailAddresses = await downloadAndProcessFile(
+          downloadUrl,
+          password
+        );
+        console.log(emailAddresses);
+        return emailAddresses;
+      } else {
+        return [];
+      }
+    });
+};

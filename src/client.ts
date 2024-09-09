@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { ApiResponse, MeetupTokenResponse, ZoomTokenResponse } from "./types";
+import { getEmails } from "./chat";
 /**
  * @class
  * Client class for interacting with the API.
@@ -9,6 +10,9 @@ export class LT {
   private baseURL: string;
   private apiKey: string;
 
+  private zoomAccountId: string | null = null;
+  private zoomClientId: string | null = null;
+  private zoomClientSecret: string | null = null;
   private zoomHttpClient: AxiosInstance;
   private zoomAccessToken: string | null = null;
 
@@ -18,7 +22,12 @@ export class LT {
    * Creates an instance of the Client.
    * @param {string} baseURL - The base URL of the API.
    */
-  constructor(apiKey: string) {
+  constructor(
+    apiKey: string,
+    zoomAccountId: string,
+    zoomClientId: string,
+    zoomClientSecret: string
+  ) {
     this.baseURL = "http://localhost:3000/api";
     this.apiKey = apiKey;
     this.httpClient = axios.create({
@@ -29,6 +38,10 @@ export class LT {
     this.zoomHttpClient = axios.create({
       baseURL: "https://api.zoom.us/v2/",
     });
+
+    this.zoomAccountId = zoomAccountId;
+    this.zoomClientId = zoomClientId;
+    this.zoomClientSecret = zoomClientSecret;
   }
 
   /**
@@ -37,19 +50,14 @@ export class LT {
    * @param {string} clientId - The clientId of the Zoom API.
    * @param {string} clientSecret - The clientSecret of the Zoom API.
    */
-  async authenticateZoom(
-    clientId: string,
-    clientSecret: string
-  ): Promise<ApiResponse<ZoomTokenResponse>> {
-    const tokenUrl = "https://zoom.us/oauth/token";
-    const authString = Buffer.from(`${clientId}:${clientSecret}`).toString(
-      "base64"
-    );
-
-    const data = "grant_type=client_credentials";
+  async authenticateZoom(): Promise<ApiResponse<ZoomTokenResponse>> {
+    const tokenUrl = `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${this.zoomAccountId}`;
+    const authString = Buffer.from(
+      `${this.zoomClientId}:${this.zoomClientSecret}`
+    ).toString("base64");
 
     try {
-      const response = await axios.post<ZoomTokenResponse>(tokenUrl, data, {
+      const response = await axios.post<ZoomTokenResponse>(tokenUrl, null, {
         headers: {
           Authorization: `Basic ${authString}`,
           "Content-Type": "application/x-www-form-urlencoded",
@@ -125,32 +133,35 @@ export class LT {
    * @param {string} eventId - The eventId of the Zoom Meeting.
    */
   async savePostEventData(eventId: string) {
-    const data = [
-      {
-        eventId,
-        name: "Khairul Hasan",
-        email: "khairul.hasan.dev@gmail.com",
-        joinTime: new Date(),
-        leaveTime: new Date(),
-      },
-      {
-        eventId,
-        name: "Khairul Hasan",
-        email: "khairul.hasan@gmail.com",
-        joinTime: new Date(),
-        leaveTime: new Date(),
-      },
-      {
-        eventId,
-        name: "Khairul Hasan",
-        email: "khairul@gmail.com",
-        joinTime: new Date(),
-        leaveTime: new Date(),
-      },
-    ];
-    const response = await this.httpClient.post("/postevent", data);
-    return {
-      data: response.data,
-    };
+    // const data = [
+    //   {
+    //     eventId,
+    //     name: "Khairul Hasan",
+    //     email: "khairul.hasan.dev@gmail.com",
+    //     joinTime: new Date(),
+    //     leaveTime: new Date(),
+    //   },
+    //   {
+    //     eventId,
+    //     name: "Khairul Hasan",
+    //     email: "khairul.hasan@gmail.com",
+    //     joinTime: new Date(),
+    //     leaveTime: new Date(),
+    //   },
+    //   {
+    //     eventId,
+    //     name: "Khairul Hasan",
+    //     email: "khairul@gmail.com",
+    //     joinTime: new Date(),
+    //     leaveTime: new Date(),
+    //   },
+    // ];
+    // const response = await this.httpClient.post("/postevent", data);
+    // return {
+    //   data: response.data,
+    // };
+    const auth = await this.authenticateZoom();
+    const emails = getEmails(eventId, this.zoomAccessToken!);
+    return emails;
   }
 }

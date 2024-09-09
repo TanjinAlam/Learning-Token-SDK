@@ -133,35 +133,8 @@ export class LT {
    * @param {string} eventId - The eventId of the Zoom Meeting.
    */
   async savePostEventData(eventId: string) {
-    // const data = [
-    //   {
-    //     eventId,
-    //     name: "Khairul Hasan",
-    //     email: "khairul.hasan.dev@gmail.com",
-    //     joinTime: new Date(),
-    //     leaveTime: new Date(),
-    //   },
-    //   {
-    //     eventId,
-    //     name: "Khairul Hasan",
-    //     email: "khairul.hasan@gmail.com",
-    //     joinTime: new Date(),
-    //     leaveTime: new Date(),
-    //   },
-    //   {
-    //     eventId,
-    //     name: "Khairul Hasan",
-    //     email: "khairul@gmail.com",
-    //     joinTime: new Date(),
-    //     leaveTime: new Date(),
-    //   },
-    // ];
-    // const response = await this.httpClient.post("/postevent", data);
-    // return {
-    //   data: response.data,
-    // };
     const auth = await this.authenticateZoom();
-    const emails = getEmails(eventId, this.zoomAccessToken!);
+    const emails = await getEmails(eventId, this.zoomAccessToken!);
     return emails;
   }
 }

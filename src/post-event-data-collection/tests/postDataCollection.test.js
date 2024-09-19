@@ -7,7 +7,7 @@ app.use('/post-event-data-collection', router);
 
 describe('GET /post-event-data-collection/:eventId', () => {
     const mockEventId = '82886746452'; // test data: meeting with polls but without registration
-    // access token manually generated using POST https://zoom.us/oauth/token?grant_type=account_credentials&account_id=jhDLkKe-RJqw1vD47uwb_w
+    // access token manually generated using POST https://zoom.us/oauth/token?grant_type=account_credentials&account_id=
     const mockAccessToken = 'eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjY4NThlODBmLTQ0YmItNGNjNS04ZGI5LTQ3MzI2YWI5MzhiMiJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjo5LCJhdWlkIjoiYTIwM2RmMzFhYmFhNGQ3M2UwNmVlODdhOWI5ZWEzMzEiLCJuYmYiOjE3MjYyNjEyMDMsImNvZGUiOiJlWnpVX19IWlJqdVdpTVBlZlQxdmxRSGhsdTltbThXRVkiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI2MjY0ODAzLCJ0eXBlIjozLCJpYXQiOjE3MjYyNjEyMDMsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.YNzKa26vWGwLxR5fc7LR7JWP28p6XeyNbN1vvlzF6FCWkzrt-08SpIE0SeEqJcHinxjVNKuGFhCmCcneuXiVDg';
 
     // Hard-coded mock response

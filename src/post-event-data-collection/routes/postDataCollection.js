@@ -86,6 +86,10 @@ router.get('/:eventId', async (req, res) => {
         // Map meeting polls for each participant who answered
         pastMeetingParticipants.forEach(participant => {
             const participantPolls = meetingPollsResponse.data.questions.filter(question => question.name === participant.name);
+            // assign userEmail with polls email if it doesn't exists
+            if(participant.userEmail === "" && participantPolls.length>0) {
+                participant.userEmail = participantPolls[0].email ?? "";
+            }
             participant.polls = participantPolls.map(question => ({
                 email: question.email,
                 questionDetails: question.question_details

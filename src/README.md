@@ -30,38 +30,47 @@ Excepted Output for the meeting ID :
         "poll_scores": [
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "How many tokens would you give to the Instructor?",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Please select the four Learning Tokens",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Select which Tokens are Fungible or Non-Fungible",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner is a <Answer 1> Token",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner Tokens are <Answer 1> Tokens",
             "score": 0
           }
         ],
@@ -81,38 +90,47 @@ Excepted Output for the meeting ID :
         "poll_scores": [
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "How many tokens would you give to the Instructor?",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Please select the four Learning Tokens",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Select which Tokens are Fungible or Non-Fungible",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner is a <Answer 1> Token",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner Tokens are <Answer 1> Tokens",
             "score": 0
           }
         ],
@@ -132,38 +150,47 @@ Excepted Output for the meeting ID :
         "poll_scores": [
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "How many tokens would you give to the Instructor?",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Please select the four Learning Tokens",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Select which Tokens are Fungible or Non-Fungible",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner is a <Answer 1> Token",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner Tokens are <Answer 1> Tokens",
             "score": 0
           }
         ],
@@ -183,38 +210,47 @@ Excepted Output for the meeting ID :
         "poll_scores": [
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Score for Instructor Token",
+            "question": "How many tokens would you give to the Instructor?",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Name and Surname",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "E-mail",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Please select the four Learning Tokens",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Select which Tokens are Fungible or Non-Fungible",
             "score": 1
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner is a <Answer 1> Token",
             "score": 0
           },
           {
             "title": "Learning Tokens - Quiz Example",
+            "question": "Score for Learner Tokens are <Answer 1> Tokens",
             "score": 0
           }
         ],

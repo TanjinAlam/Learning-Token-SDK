@@ -88,6 +88,7 @@ interface ParticipantScore {
 
 interface Scores {
   title: string;
+  question: string;
   score: number;
 }
 
@@ -266,13 +267,15 @@ function calculateScore(pollsQuestionsResponse: ZoomPollsQuestion, pollsAnswers:
       const pollQuestion = pollsQuestionsResponse.polls.find(poll => poll.id === responseDetail.polling_id);
 
       if (pollQuestion) {
-        const scoreObj: Scores = {
-          title: pollQuestion.title,
-          score: 0
-        };
 
         // Find the related question in the poll
         const question = pollQuestion.questions.find(q => q.name === responseDetail.question);
+
+        const scoreObj: Scores = {
+          title: pollQuestion.title,
+          question: question?.name || 'Default',
+          score: 0
+        };
 
         if (question) {
           participantScore.attempted++;  // Increment attempted for every question
@@ -306,7 +309,7 @@ function calculateScore(pollsQuestionsResponse: ZoomPollsQuestion, pollsAnswers:
 app.get('/fetch-and-process-data', async (req, res) => {
   const baseUrl = "https://api.zoom.us/v2";
   const meetingId = process.env.MEETING_ID || "82258262218";
-  const bearerToken = process.env.BEARER_TOKEN || "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjYyYjhhM2QyLTY3ZDUtNDViNy04ZGI0LWQ4YzQxOTJlODlkOSJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjoxMCwiYXVpZCI6IjcxYzlmZDZhMGYxMmJiZDU2MDAzOGU1YmVjNTU2OWUxZGI0YjczMDYyY2E5N2JmNDZiNTNjNjljMTk0MGFlNjYiLCJuYmYiOjE3MjcxODg0NTMsImNvZGUiOiJOUkNEWm42MlFqeXVBYVpIZlIxSEx3S1pYaDU3NGVDVUUiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI3MTkyMDUzLCJ0eXBlIjozLCJpYXQiOjE3MjcxODg0NTMsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.sg1iZSO7jupWUZoDUxzlhmpnuwi7--lhvjGDz90VoGQ895ODrF0ai59AbhSqgeaYWOOX3jr0W8NeeGTGh58B2Q";
+  const bearerToken = process.env.BEARER_TOKEN || "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImNjODgwMDAxLThmMDQtNGVlMy05YjcwLTE5MzdiZjVhYzZiNyJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjoxMCwiYXVpZCI6IjcxYzlmZDZhMGYxMmJiZDU2MDAzOGU1YmVjNTU2OWUxZGI0YjczMDYyY2E5N2JmNDZiNTNjNjljMTk0MGFlNjYiLCJuYmYiOjE3MjcxOTA4OTAsImNvZGUiOiJjLXZXWHhCOVRkdTJkNG5rb3IxRzNRb1BMbXZFeDhNR0wiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI3MTk0NDkwLCJ0eXBlIjozLCJpYXQiOjE3MjcxOTA4OTAsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.YEPPJxbk8Mw2EJJMlyzq2Rx7H9w0hfEFbfFvRbRGxtkut3lvchEkQU6B-qz9tI4jn9vh3yAtr8gKAGwgSmVZQA";
   const emailMappingsPath = path.join(__dirname, 'downloads', 'LT_87648908877.json');
   const outputPath = path.join(__dirname, 'processed_data.json');
 

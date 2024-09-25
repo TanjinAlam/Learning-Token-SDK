@@ -6,7 +6,7 @@ npm install -g typescript ts-node @types/node @types/express express
 
 To run this server, you can use the following command in your terminal
 ```
-ts-node 2tokens-api.ts
+ts-node Alltokens-api.ts
 ```
 
 Excepted Output for the meeting ID :

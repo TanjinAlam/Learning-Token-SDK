@@ -89,6 +89,7 @@ interface ParticipantScore {
 interface Scores {
   title: string;
   question: string;
+  // answer: string;
   score: number;
 }
 
@@ -197,8 +198,9 @@ function readEmailMappings(filePath: string): EmailMap {
 function processParticipantsAndPollsData(
   participants: ZoomParticipant[],
   pollScores: ParticipantScore[],
-  emailMappings: EmailMap
-): Map<string, ParticipantData> {
+  emailMappings: EmailMap,
+  chatContent: string
+): { participantMap: Map<string, ParticipantData>, engagement: string } {
   const participantMap = new Map<string, ParticipantData>();
 
   // Process participants to calculate total time and map email and LTId
@@ -230,20 +232,23 @@ function processParticipantsAndPollsData(
     }
   });
 
-  return participantMap;
+  return { participantMap, engagement: chatContent };;
 }
 
 function saveProcessedDataToFile(
-  data: Map<string, ParticipantData>,
+  data: { participantMap: Map<string, ParticipantData>, engagement: string },
   outputPath: string
 ): void {
-  const processedData = Array.from(data.entries()).map(([name, participantData]) => ({
-    name,
-    totalTime: participantData.totalTime,
-    email: participantData.email,
-    LTId: participantData.LTId,
-    pollAnswers: participantData.pollAnswers,
-  }));
+  const processedData = {
+    engagement: data.engagement,
+    participant: Array.from(data.participantMap.entries()).map(([name, participantData]) => ({
+      name,
+      totalTime: participantData.totalTime,
+      email: participantData.email,
+      LTId: participantData.LTId,
+      pollAnswers: participantData.pollAnswers,
+    }))
+  }
 
   fs.writeFileSync(outputPath, JSON.stringify(processedData, null, 2));
   console.log(`Processed data has been saved to ${outputPath}`);
@@ -270,6 +275,7 @@ function calculateScore(pollsQuestionsResponse: ZoomPollsQuestion, pollsAnswers:
 
         // Find the related question in the poll
         const question = pollQuestion.questions.find(q => q.name === responseDetail.question);
+        // const answer = pollsAnswers.questions.find(q => q.name === responseDetail.answer);
 
         const scoreObj: Scores = {
           title: pollQuestion.title,
@@ -309,8 +315,9 @@ function calculateScore(pollsQuestionsResponse: ZoomPollsQuestion, pollsAnswers:
 app.get('/fetch-and-process-data', async (req, res) => {
   const baseUrl = "https://api.zoom.us/v2";
   const meetingId = process.env.MEETING_ID || "82258262218";
-  const bearerToken = process.env.BEARER_TOKEN || "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImNjODgwMDAxLThmMDQtNGVlMy05YjcwLTE5MzdiZjVhYzZiNyJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjoxMCwiYXVpZCI6IjcxYzlmZDZhMGYxMmJiZDU2MDAzOGU1YmVjNTU2OWUxZGI0YjczMDYyY2E5N2JmNDZiNTNjNjljMTk0MGFlNjYiLCJuYmYiOjE3MjcxOTA4OTAsImNvZGUiOiJjLXZXWHhCOVRkdTJkNG5rb3IxRzNRb1BMbXZFeDhNR0wiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI3MTk0NDkwLCJ0eXBlIjozLCJpYXQiOjE3MjcxOTA4OTAsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.YEPPJxbk8Mw2EJJMlyzq2Rx7H9w0hfEFbfFvRbRGxtkut3lvchEkQU6B-qz9tI4jn9vh3yAtr8gKAGwgSmVZQA";
-  const emailMappingsPath = path.join(__dirname, 'downloads', 'LT_87648908877.json');
+  const bearerToken = process.env.BEARER_TOKEN || "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjEyNTJkYzliLWFhM2ItNGI3Zi1hMDg2LTc1ZTliYmMyNjg5YiJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiIyZE5QTlpldVNUV1NtX212NG1BWGFnIiwidmVyIjoxMCwiYXVpZCI6IjcxYzlmZDZhMGYxMmJiZDU2MDAzOGU1YmVjNTU2OWUxZGI0YjczMDYyY2E5N2JmNDZiNTNjNjljMTk0MGFlNjYiLCJuYmYiOjE3MjcyODQ1ODcsImNvZGUiOiJGS2NNVk4zaVNNNkxDbldCa1M3bE9RSlhLWHJWVHVVSHMiLCJpc3MiOiJ6bTpjaWQ6YlJCZ0JTbEhSVE84aTdZUEZjd0JmdyIsImdubyI6MCwiZXhwIjoxNzI3Mjg4MTg3LCJ0eXBlIjozLCJpYXQiOjE3MjcyODQ1ODcsImFpZCI6ImpoRExrS2UtUkpxdzF2RDQ3dXdiX3cifQ.qMp0cs8v1CbAAasYnD3NB6tHX1ioowY3mJBAGGbQSyEBtnCN7g0VRaB8CNEewPLCbGT37Zu_BglAIIgNVf5iAg";
+  const emailMappingsPath = path.join(__dirname, 'downloads', 'LT_82258262218.json');
+  const chatPath = path.join(__dirname, 'downloads', '82258262218.txt');
   const outputPath = path.join(__dirname, 'processed_data.json');
 
   try {
@@ -329,11 +336,14 @@ app.get('/fetch-and-process-data', async (req, res) => {
     // Read email mappings
     const emailMappings = readEmailMappings(emailMappingsPath);
 
+    // Read chat
+    const chatContent = fs.readFileSync(chatPath, 'utf-8');
+
     // Calculate scores
     const pollScores = calculateScore(pollQuestionsResponse, pollAnswers);
 
     // Process participants and poll data
-    const participantMap = processParticipantsAndPollsData(participants, pollScores, emailMappings);
+    const participantMap = processParticipantsAndPollsData(participants, pollScores, emailMappings, chatContent);
 
     // Save processed data to file
     saveProcessedDataToFile(participantMap, outputPath);
